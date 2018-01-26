@@ -1,0 +1,57 @@
+#这是原文
+#Seattle Weather data_Rain prediction_1948-2017
+sw <- read.csv("../input/seattleWeather_1948-2017.csv")
+dim(sw)
+
+#Removing RAIN "NA" value records
+sw1 <- sw[-c(which(is.na(sw$RAIN))),]
+dim(sw1)
+
+#Logistic regression model to predict the RAIN
+lrmodel <- glm(RAIN~TMAX+TMIN, family = binomial, data=sw1)
+summary(lrmodel)
+
+#install.packages("caret")
+library(caret)
+cat("Variable_Importance:")
+varImp(lrmodel)
+
+
+predicted_values <- predict(lrmodel, type="response")
+cat("Predicted_Values:\n")
+predicted_values[1:10]
+
+threshold=0.5
+cat("Threshold_Value:")
+threshold
+
+predicted_class <- ifelse(predict(lrmodel, type="response")>threshold,TRUE,FALSE)
+cat("Predicted_Class:\n")
+predicted_class[1:10]
+
+actual_values <- lrmodel$y
+cat("Actual_Values:\n")
+actual_values[1:10]
+
+conf_matrix <- table(predicted_class,actual_values)
+cat("Confusion_Matrix:\n")
+conf_matrix
+
+accuracy <- (conf_matrix[1,1]+conf_matrix[2,2])/(sum(conf_matrix))
+cat("Accuracy_of_the_Model:")
+accuracy
+
+sensi <- (conf_matrix[1,1])/(conf_matrix[1,1]+conf_matrix[1,2])
+cat("Sensitivity:")
+sensi
+
+speci <- (conf_matrix[2,2])/(conf_matrix[2,1]+conf_matrix[2,2])
+cat("Specificity:")
+speci
+
+#install.packages("pROC")
+library(pROC)
+roccurve <- roc(actual_values, predicted_values)
+plot(roccurve)
+
+auc(roccurve)
