@@ -92,10 +92,10 @@ library(pROC)
 #roc 这是pROC包的主要功能。 它建立一个ROC曲线并返回一个“roc”对象，一个“roc”类的列表。 
 #这个对象可以打印，绘图或传递给函数auc，ci，smooth.roc和coords。 此外，可以将两个roc对象与roc.test进行比较  
 roccurve <- roc(actual_values, predicted_values)
-plot(roccurve)
-<img src="img/a.png"></img>  
+plot(roccurve)  
 #auc 该功能用梯形法则计算ROC曲线下面积（AUC）的数值。 
 #有两种语法是可能的：roc函数中的类“roc”的一个对象，或者两个向量（响应，预测器）或公式（响应预测器）。   
 #默认情况下，计算总AUC，但部分ROC曲线可以用partial.auc指定。  
 auc(roccurve)  
 ```
+<img src="img/a.png"></img>  
